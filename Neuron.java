@@ -16,11 +16,11 @@ public class Neuron {
 		}
 	}
 	
-	public void applyActivationFunction(double weightedSum) { 
+	public void applySigmoid(double weightedSum) { 	// apply the Sigmoid transfer function to calculate the output
 		output =  1.0 / (1 + Math.exp(-1.0 * weightedSum));
 	}
 	
-	public double derivative() { 
+	public double calcDerivative() { 	// uses output to calculate derivative
 		return output * (1.0 - output);
 	}
 	public double[] getWeights() { 

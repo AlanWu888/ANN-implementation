@@ -22,7 +22,7 @@ public class Driver {
 				case "run":
 					double[] result = new double[ Driver.TRAINING_DATA.length];
 					IntStream.range(0, Driver.TRAINING_DATA.length).forEach(i ->
-						result[i] = neuralNetwork.forwardprop(Driver.TRAINING_DATA[i][0])
+						result[i] = neuralNetwork.fProp(Driver.TRAINING_DATA[i][0])
 								                 .getLayers()[2].getNeurons()[0].getOutput());
 					printResult(result);
 					break;
@@ -30,7 +30,7 @@ public class Driver {
 					IntStream.range(0,  NUMB_OF_EPOCHS).forEach(i -> {
 						System.out.println("[epoch "+i+"]");
 						IntStream.range(0,  TRAINING_DATA.length).forEach(j ->
-							System.out.println(neuralNetwork.forwardprop(Driver.TRAINING_DATA[j][0])
+							System.out.println(neuralNetwork.fProp(Driver.TRAINING_DATA[j][0])
 									                        .backpropError(Driver.TRAINING_DATA[j][1][0])));
 					});
 					System.out.println("[done training]");
