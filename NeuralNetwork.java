@@ -2,8 +2,8 @@ package xor_problem;
 
 import java.util.stream.IntStream;
 public class NeuralNetwork {
-	static final double LEARNING_RATE = 0.8;
-	final static int NUMB_OF_INPUT_NEURONS = Driver.TRAINING_DATA[0][0].length; 
+	static final double LEARNING_RATE = 0.01;
+	final static int NUMB_OF_INPUT_NEURONS = data_sets.TRAINING_DATA[0][0].length; 
 	final static int NUMB_OF_OUTPUT_NEURONS = 1;
 	private int numbOfHiddenNeurons;
 	private Layer[] layers = new Layer[e_layerTypes.values().length];

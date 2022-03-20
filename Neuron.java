@@ -8,6 +8,7 @@ public class Neuron {
 	private double output = 0;
 	private double error = 0;
 	private e_layerTypes layerType = null;
+	
 	public Neuron(e_layerTypes layerType, int numbOfWeights) { 
 		this.layerType = layerType; 
 		if (layerType != e_layerTypes.INPUT) {
