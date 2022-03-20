@@ -22,37 +22,34 @@ public class excel_handler {
 	static String DIR_VALID = "";
 	static String DIR_TEST = "";
 	static int MIN = 33970;
-	static int MAX = 35430;
-	static int DATE_SPACE = MAX-MIN;
 	
 	public static void main(String[] args) {
 		/*
-		System.out.println(normaliseKey(333));
-		System.out.println(deNormaliseKey(normaliseKey(333)));
-		
+
 		System.out.println(normaliseData(123));
-		System.out.println(deNormaliseDate(normaliseData(123)));
+		System.out.println(deNormaliseDate(normaliseData(123)));	// test normalise function
 		
-		System.out.println(data_sets.TRAINING_DATA[0][0][1]);
+		System.out.println(data_sets.TRAINING_DATA[0][0][1]);		// gets the date - will have to denormalise this
+		System.out.println(data_sets.TRAINING_DATA[2][0][1]);		// gets the date - will have to denormalise this
 		*/
-		writeResults();
+		
+		getDataSet(DIR_TRAIN);
 	}
 	
 	private static HashMap<Double, Double> getDataSet(String fileDir) {
 		HashMap<Double, Double> dataSet = new HashMap<Double, Double>();
-		System.out.println("front");
 		try {  
 			File file = new File("C:\\Users\\alanw\\OneDrive\\Desktop\\AI coursework\\Spreadsheets\\training data\\training.xlsx");   //creating a new file instance  
 			FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
 			//creating Workbook instance that refers to .xlsx file  
 			XSSFWorkbook wb = new XSSFWorkbook(fis);   
-			XSSFSheet sheet = wb.getSheetAt(5);     	//creating a Sheet object to retrieve object  
+			XSSFSheet sheet = wb.getSheetAt(0);     	//creating a Sheet object to retrieve object  
 			Iterator<Row> itr = sheet.iterator();    	//iterating over excel file  
 			while (itr.hasNext()) {  
 				Row row = itr.next();  
 				//String key = String.valueOf(row.getCell(0).getNumericCellValue());  			// generate id for day (show as int)
 				Double key = new Double(normaliseKey(row.getCell(0).getNumericCellValue()));
-				Double value = new Double(normaliseData(row.getCell(1).getNumericCellValue()));	// read flow of skelton that day
+				Double value = new Double(normaliseData(row.getCell(1).getNumericCellValue()));				// read flow of skelton that day
 				dataSet.put(key, value);
 			}  
 		} catch(Exception e) {  
@@ -70,13 +67,12 @@ public class excel_handler {
 		double[][] skeltonResults = new double[setLength][2];
 		for (int i=0; i<setLength; i++) {
 			skeltonResults[i][0] = deNormaliseKey(data_sets.TRAINING_DATA[0][0][1]);
-			skeltonResults[i][1] = deNormaliseDate(result[i]);
+			skeltonResults[i][1] = deNormaliseData(result[i]);
 		}
 		System.out.println(Arrays.deepToString(skeltonResults));
 	}
 	
-	//double[] result, int setLength
-	public static void writeResults() {
+	public static void writeResults(double[] result, int setLength) {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("results");
 		sheet.setColumnWidth(0, 8560);
@@ -84,18 +80,21 @@ public class excel_handler {
 		
 		Row header = sheet.createRow(0);
 		
+		// create table worksheet headers
 		Cell headerCell = header.createCell(0);
-		headerCell.setCellValue("Date");
-		
+		headerCell.setCellValue("Date");	
 		headerCell = header.createCell(1);
 		headerCell.setCellValue("Skelton");
 		
-		Row row = sheet.createRow(1);
-		Cell cell = row.createCell(0);
-		cell.setCellValue(8888);
-		
-		cell = row.createCell(1);
-		cell.setCellValue(7777);
+		// fill rows
+		for(int i=0; i<setLength-1; i++) {
+			Row row = sheet.createRow(i+1);
+			Cell cell = row.createCell(0);
+			cell.setCellValue(deNormaliseKey(data_sets.TRAINING_DATA[i][0][1]));
+			
+			cell = row.createCell(1);
+			cell.setCellValue(deNormaliseData(result[i+1]));
+		}
 		
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
@@ -108,41 +107,6 @@ public class excel_handler {
 			e.printStackTrace();
 		}
 	}
-	
-	/* BACKUP
-	 	public static void writeResults() {
-		Workbook workbook = new XSSFWorkbook();
-		Sheet sheet = workbook.createSheet("results");
-		sheet.setColumnWidth(0, 8560);
-		sheet.setColumnWidth(1, 8560);
-		
-		Row header = sheet.createRow(0);
-		
-		Cell headerCell = header.createCell(0);
-		headerCell.setCellValue("Date");
-		
-		headerCell = header.createCell(1);
-		headerCell.setCellValue("Skelton");
-		
-		Row row = sheet.createRow(1);
-		Cell cell = row.createCell(0);
-		cell.setCellValue(8888);
-		
-		cell = row.createCell(1);
-		cell.setCellValue(7777);
-		
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
-		try {
-			FileOutputStream outputStream = new FileOutputStream(fileLocation);
-			workbook.write(outputStream);
-			workbook.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	 */
 	
 	private static double normaliseKey(double key) {
 		/*
@@ -156,10 +120,15 @@ public class excel_handler {
 		 * To normalise, I will be taking the date and dividing it by the difference between the first and last date (the dateSpace), 
 		 * then multiply the result by 0.8 and add 0.1 to it.
 		 */
-		double returnValue = (((key-MIN)/DATE_SPACE) * 0.8 ) + 0.1;	
+		double returnValue = ((key - MIN) / 2000) + 0.1;
 		return returnValue;
 	}
 	
+	private static double deNormaliseKey(double key) {
+		double returnValue = ((key - 0.1) * 2000) + MIN;
+		return returnValue;
+	}
+		
 	private static double normaliseData(double flow) {
 		/*
 		 * 0 flow = 0.1
@@ -171,12 +140,7 @@ public class excel_handler {
 		return returnValue;
 	}
 	
-	private static double deNormaliseKey(double key) {
-		double returnValue = (((key - 0.1) / 0.8) * DATE_SPACE) + MIN;	
-		return returnValue;
-	}
-	
-	private static double deNormaliseDate(double flow) {
+	private static double deNormaliseData(double flow) {
 		double returnValue = ((flow - 0.1) / 0.8) * 350;
 		return returnValue;
 	}

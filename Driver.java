@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.IntStream;
-import java.util.Arrays;
 
 public class Driver {
 	static int NUMB_OF_EPOCHS = 10000; 
@@ -15,6 +14,7 @@ public class Driver {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		// System.out.println("> Please enter # of neurons in the hidden layer");
 		// NeuralNetwork neuralNetwork = new NeuralNetwork(Integer.parseInt(bufferedReader.readLine()));
+		
 		NeuralNetwork neuralNetwork = new NeuralNetwork(data_sets.TRAINING_DATA.length);	// create ann with n amount of hidden nuerons where n is the number of rows in the data set being used
 		boolean flag = true;
 		while (flag) {
@@ -42,7 +42,8 @@ public class Driver {
 		System.exit(0);
 	}
 	static void printResult(double[] result) {
-		excel_handler.getOuts(result, data_sets.TRAINING_DATA.length);
+		// excel_handler.getOuts(result, data_sets.TRAINING_DATA.length);
+		excel_handler.writeResults(result, data_sets.TRAINING_DATA.length);
 		/*
 		IntStream.range(0, data_sets.TRAINING_DATA[0][0].length).forEach(x -> System.out.print("  Input "+x+"  |"));
 		System.out.println(" Target Result |  Result    ");
