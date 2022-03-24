@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.stream.IntStream;
 
 public class Driver {
-	static int NUMB_OF_EPOCHS = 10000; 
+	static int NUMB_OF_EPOCHS = 2000; 
 		
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// System.out.println(Arrays.toString(data_sets.TRAINING_DATA[0][0]));	// [1, 2, ,3]
@@ -22,15 +22,15 @@ public class Driver {
 			String command = bufferedReader.readLine();
 			switch (command) {
 				case "run":
-					double[] result = new double[data_sets.TRAINING_DATA.length];
-					IntStream.range(0, data_sets.TRAINING_DATA.length).forEach(i ->result[i] = neuralNetwork.fProp(data_sets.TRAINING_DATA[i][0]).getLayers()[2].getNeurons()[0].getOutput());
+					double[] result = new double[winter_sets.WINTER_TRAINING.length];
+					IntStream.range(0, winter_sets.WINTER_TRAINING.length).forEach(i ->result[i] = neuralNetwork.fProp(winter_sets.WINTER_TRAINING[i][0]).getLayers()[2].getNeurons()[0].getOutput());
 					printResult(result);
 					break;
 				case "train":
 					IntStream.range(0,  NUMB_OF_EPOCHS).forEach(i -> {
 						System.out.println("[epoch "+i+"]");
-						IntStream.range(0, data_sets.TRAINING_DATA.length).forEach(j ->
-							neuralNetwork.fProp(data_sets.TRAINING_DATA[j][0]).backpropError(data_sets.TRAINING_DATA[j][1][0]));
+						IntStream.range(0, winter_sets.WINTER_TRAINING.length).forEach(j ->
+							neuralNetwork.fProp(winter_sets.WINTER_TRAINING[j][0]).backpropError(winter_sets.WINTER_TRAINING[j][1][0]));
 					});
 					System.out.println("[done training]");
 					break;
@@ -43,7 +43,7 @@ public class Driver {
 	}
 	static void printResult(double[] result) {
 		// excel_handler.getOuts(result, data_sets.TRAINING_DATA.length);
-		excel_handler.writeResults(result, data_sets.TRAINING_DATA.length);
+		excel_handler.writeResults(result, winter_sets.WINTER_TRAINING.length);
 		/*
 		IntStream.range(0, data_sets.TRAINING_DATA[0][0].length).forEach(x -> System.out.print("  Input "+x+"  |"));
 		System.out.println(" Target Result |  Result    ");
