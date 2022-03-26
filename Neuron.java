@@ -1,4 +1,4 @@
-package xor_problem;
+package skelton_ai;
 
 import java.util.stream.IntStream;
 

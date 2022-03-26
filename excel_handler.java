@@ -1,10 +1,9 @@
-package xor_problem;
+package skelton_ai;
 
 import java.io.File;  
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.HashMap;
 
 public class excel_handler {
-	static int NUMB_OF_EPOCHS = 1000;
 	static String DIR_TRAIN = "C:\\Users\\alanw\\OneDrive\\Desktop\\AI coursework\\Spreadsheets\\training data\\training.xlsx";
 	static String DIR_VALID = "";
 	static String DIR_TEST = "";
@@ -25,22 +23,13 @@ public class excel_handler {
 	static int MAX_FLOW = 300;
 	
 	public static void main(String[] args) {
-		/*
-
-		System.out.println(normaliseData(123));
-		System.out.println(deNormaliseDate(normaliseData(123)));	// test normalise function
-		
-		System.out.println(data_sets.TRAINING_DATA[0][0][1]);		// gets the date - will have to denormalise this
-		System.out.println(data_sets.TRAINING_DATA[2][0][1]);		// gets the date - will have to denormalise this
-		*/
-		
 		getDataSet(DIR_TRAIN);
 	}
 	
 	private static HashMap<Double, Double> getDataSet(String fileDir) {
 		HashMap<Double, Double> dataSet = new HashMap<Double, Double>();
 		try {  
-			File file = new File("C:\\Users\\alanw\\OneDrive\\Desktop\\AI coursework\\Spreadsheets\\training data\\training.xlsx");   //creating a new file instance  
+			File file = new File(DIR_TRAIN);   //creating a new file instance  
 			FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
 			//creating Workbook instance that refers to .xlsx file  
 			XSSFWorkbook wb = new XSSFWorkbook(fis);   
@@ -58,16 +47,16 @@ public class excel_handler {
 		}
 		//Print keys and values
 		for (Double i : dataSet.keySet()) {
-		  System.out.println("{{1," + i + "," + dataSet.get(i) + "},{" + dataSet.get(i) + "}},");
+		  System.out.println("{{" + i + "," + dataSet.get(i) + "},{" + dataSet.get(i) + "}},");
 		}
 
 		return dataSet;
 	}
 	
 	public static void getOuts(double[] result, int setLength) {
-		double[][] skeltonResults = new double[setLength][2];
+		double[][] skeltonResults = new double[setLength][3];
 		for (int i=0; i<setLength; i++) {
-			skeltonResults[i][0] = deNormaliseKey(winter_sets.WINTER_TRAINING[0][0][1]);
+			skeltonResults[i][0] = deNormaliseKey(data_sets.TRAINING_DATA[0][0][0]);	// gets the key
 			skeltonResults[i][1] = deNormaliseData(result[i]);
 		}
 		System.out.println(Arrays.deepToString(skeltonResults));
@@ -91,7 +80,7 @@ public class excel_handler {
 		for(int i=0; i<setLength-1; i++) {
 			Row row = sheet.createRow(i+1);
 			Cell cell = row.createCell(0);
-			cell.setCellValue(deNormaliseKey(winter_sets.WINTER_TRAINING[i][0][1]));
+			cell.setCellValue(deNormaliseKey(data_sets.TRAINING_DATA[i][0][0]));
 			
 			cell = row.createCell(1);
 			cell.setCellValue(deNormaliseData(result[i+1]));

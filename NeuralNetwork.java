@@ -1,9 +1,9 @@
-package xor_problem;
+package skelton_ai;
 
 import java.util.stream.IntStream;
 public class NeuralNetwork {
 	static final double LEARNING_RATE = 0.01;
-	final static int NUMB_OF_INPUT_NEURONS = data_sets.TRAINING_DATA[0][0].length; 
+	final static int NUMB_OF_INPUT_NEURONS = data_sets.TRAINING_DATA[0][0].length;	// will become 2 input neurons as we have 2 inputs: the date and the flow of skelton on that given day 
 	final static int NUMB_OF_OUTPUT_NEURONS = 1;
 	private int numbOfHiddenNeurons;
 	private Layer[] layers = new Layer[e_layerTypes.values().length];
@@ -19,13 +19,16 @@ public class NeuralNetwork {
 	}
 	
 	public NeuralNetwork fProp(double input[]) { 
+		// System.out.println("total neurons: " + (layers[0].getNeurons().length + layers[1].getNeurons().length + layers[2].getNeurons().length));
 		// forward propagate network which runs the network by taking in a vector input
 		for (int i = 0; i < layers.length; i++) {
 			switch (layers[i].getLayerType()) {
 				case INPUT:
 					// if we encounter an input layer, we go through all input neurons and set their outputs to the input that is coming in
-					for (int j = 0; j < layers[i].getNeurons().length; j++)
+					for (int j = 0; j < layers[i].getNeurons().length; j++) {
 						layers[i].getNeurons()[j].setOutput(input[j]);
+					}
+						
 	    			break;
 	    			
 		    	case HIDDEN:
