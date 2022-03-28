@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Arrays;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -23,7 +24,27 @@ public class excel_handler {
 	static int MAX_FLOW = 300;
 	
 	public static void main(String[] args) {
-		getDataSet(DIR_TRAIN);
+		getData(DIR_TRAIN);
+	}
+	
+	private static void getData(String fileDir) {
+		try {  
+			File file = new File(DIR_TRAIN);   //creating a new file instance  
+			FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
+			//creating Workbook instance that refers to .xlsx file  
+			XSSFWorkbook wb = new XSSFWorkbook(fis);   
+			XSSFSheet sheet = wb.getSheetAt(7);     	//creating a Sheet object to retrieve object  
+			Iterator<Row> itr = sheet.iterator();    	//iterating over excel file  
+			while (itr.hasNext()) {  
+				Row row = itr.next();  
+				//String key = String.valueOf(row.getCell(0).getNumericCellValue());  			// generate id for day (show as int)
+				Double key = new Double(normaliseKey(row.getCell(0).getNumericCellValue()));
+				Double value = new Double(normaliseData(row.getCell(1).getNumericCellValue()));				// read flow of skelton that day
+				System.out.println("{{" + key + "," + value + "},{" + value + "}},");
+			}  
+		} catch(Exception e) {  
+			e.printStackTrace();  
+		}
 	}
 	
 	private static HashMap<Double, Double> getDataSet(String fileDir) {
@@ -62,6 +83,42 @@ public class excel_handler {
 		System.out.println(Arrays.deepToString(skeltonResults));
 	}
 	
+	public static void writeErrors(List<Double> rmse) {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("errors");
+		sheet.setColumnWidth(0, 8560);
+		sheet.setColumnWidth(1, 8560);
+		
+		Row header = sheet.createRow(0);
+		
+		// create table worksheet headers
+		Cell headerCell = header.createCell(0);
+		headerCell.setCellValue("epoch");	
+		headerCell = header.createCell(1);
+		headerCell.setCellValue("error");
+		
+		// fill rows
+		for(int i=0; i<rmse.size()-1; i++) {
+			Row row = sheet.createRow(i+1);
+			Cell cell = row.createCell(0);
+			cell.setCellValue(i);
+			
+			cell = row.createCell(1);
+			cell.setCellValue(rmse.get(i+1));
+		}
+		
+		File currDir = new File(".");
+		String path = currDir.getAbsolutePath();
+		String fileLocation = path.substring(0, path.length() - 1) + "errors.xlsx";
+		try {
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
 	public static void writeResults(double[] result, int setLength) {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("results");
@@ -88,7 +145,7 @@ public class excel_handler {
 		
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
+		String fileLocation = path.substring(0, path.length() - 1) + "results.xlsx";
 		try {
 			FileOutputStream outputStream = new FileOutputStream(fileLocation);
 			workbook.write(outputStream);

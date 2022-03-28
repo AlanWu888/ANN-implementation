@@ -18,6 +18,17 @@ public class NeuralNetwork {
 		layers[2] = new Layer(this, e_layerTypes.OUTPUT);
 	}
 	
+	public static double calcRMSE(double results[]) {
+		double total = 0;
+		int dataLength = results.length;
+		// loop through all results and compare with target result, get absolute value and calculate rmse from that
+		for (int i=0; i<dataLength; i++) {
+			total = Math.abs(results[i] - data_sets.TRAINING_DATA[i][1][0]);
+		}
+		double returnValue = Math.sqrt(total/dataLength);
+		return returnValue;
+	}
+	
 	public NeuralNetwork fProp(double input[]) { 
 		// System.out.println("total neurons: " + (layers[0].getNeurons().length + layers[1].getNeurons().length + layers[2].getNeurons().length));
 		// forward propagate network which runs the network by taking in a vector input
