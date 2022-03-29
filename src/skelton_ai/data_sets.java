@@ -1,7 +1,7 @@
 package skelton_ai;
 
 public class data_sets {
-	// {input, date, river flow}, {expected outcome}
+	// {date, river flow}, {expected outcome}
 	static double TRAINING_DATA[][][] = new double[][][] {
 		{{0.1,0.16960000000000003},{0.16960000000000003}},
 		{{0.1005,0.16629333333333335},{0.16629333333333335}},

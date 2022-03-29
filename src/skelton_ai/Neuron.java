@@ -10,6 +10,9 @@ public class Neuron {
 	private e_layerTypes layerType = null;
 	
 	public Neuron(e_layerTypes layerType, int numbOfWeights) { 
+		/*
+		 * Initialises a neuron; if the neuron does not belong to the input layer, randomly generate a set of weights for it
+		 */
 		this.layerType = layerType; 
 		if (layerType != e_layerTypes.INPUT) {
 			weights = new double[numbOfWeights];
@@ -41,6 +44,7 @@ public class Neuron {
 	}
 	
 	public String toString() {
+		// toString method to display information about a neuron
 		StringBuffer returnValue = new StringBuffer("(" + layerType + ", ");
 		if (layerType == e_layerTypes.INPUT) returnValue.append(String.format("%.2f", output)+")");
 		else {

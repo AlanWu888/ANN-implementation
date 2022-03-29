@@ -74,7 +74,7 @@ public class NeuralNetwork {
 		outputNeuron.setError((targetResult - outputNeuron.getOutput()) * outputNeuron.calcDerivative());
 		for (int j = 0; j < outputNeuron.getWeights().length; j++)
 			outputNeuron.getWeights()[j] = outputNeuron.getWeights()[j] + LEARNING_RATE * outputNeuron.getError() * hiddenNeuron[j].getOutput();
-		// then we back propagate the error to the hidden neurons
+			// then we back propagate the error to the hidden neurons
 		for (int i = 0; i < hiddenNeuron.length; i++) {
 			hiddenNeuron[i].setError((outputNeuron.getWeights()[i] * outputNeuron.getError()) * hiddenNeuron[i].calcDerivative());
 			// we use this to then calculate the error on the hidden neurons
@@ -93,6 +93,7 @@ public class NeuralNetwork {
 	}
 	
 	public String toString() { 
+		// toString method to display information about neural network
 		StringBuffer returnValue = new StringBuffer();
 		IntStream.range(0, layers.length).forEach(x -> returnValue.append(layers[x] + "  "));
 		return returnValue.toString();

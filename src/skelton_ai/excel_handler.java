@@ -23,7 +23,7 @@ public class excel_handler {
 	
 	public static void main(String[] args) {
 		//getData(DIR_TRAIN);
-		getData(DIR_VALID);
+		//getData(DIR_VALID);
 		//getData(DIR_TEST);
 		// System.out.println();
 		// System.out.println(getData(DIR_TRAIN).get(0).get(0));
@@ -198,7 +198,7 @@ public class excel_handler {
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
 		String fileLocation = path.substring(0, path.length() - 1) + "results.xlsx";
-
+		
 		try {
 			FileOutputStream outputStream = new FileOutputStream(fileLocation);
 			workbook.write(outputStream);
@@ -209,21 +209,25 @@ public class excel_handler {
 	}
 	
 	private static double normaliseKey(double key) {
+		// normalises the date value
 		double returnValue = ((key - MIN) / 2000) + 0.1;
 		return returnValue;
 	}
 	
 	private static double deNormaliseKey(double key) {
+		// denormalises the date value
 		double returnValue = ((key - 0.1) * 2000) + MIN;
 		return returnValue;
 	}
 		
 	private static double normaliseData(double flow) {
+		// normalises the river flow value
 		double returnValue = ((flow/MAX_FLOW)*0.8)+0.1;	
 		return returnValue;
 	}
 	
 	private static double deNormaliseData(double flow) {
+		// denormalises the river flow value
 		double returnValue = ((flow - 0.1) / 0.8) * MAX_FLOW;
 		return returnValue;
 	}
