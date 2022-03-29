@@ -23,8 +23,8 @@ public class excel_handler {
 	
 	public static void main(String[] args) {
 		//getData(DIR_TRAIN);
-		//getData(DIR_VALID);
-		getData(DIR_TEST);
+		getData(DIR_VALID);
+		//getData(DIR_TEST);
 		// System.out.println();
 		// System.out.println(getData(DIR_TRAIN).get(0).get(0));
 	}
@@ -97,7 +97,81 @@ public class excel_handler {
 		}	
 	}
 	
-	public static void writeResults(double[] result, int setLength) {
+	public static void writeTest(double[] result) {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("test");
+		sheet.setColumnWidth(0, 8560);
+		sheet.setColumnWidth(1, 8560);
+		
+		Row header = sheet.createRow(0);
+		
+		// create table worksheet headers
+		Cell headerCell = header.createCell(0);
+		headerCell.setCellValue("Date");	
+		headerCell = header.createCell(1);
+		headerCell.setCellValue("Skelton");
+		
+		// fill rows
+		for(int i=0; i<result.length-1; i++) {
+			Row row = sheet.createRow(i+1);
+			Cell cell = row.createCell(0);
+			cell.setCellValue(deNormaliseKey(data_sets.TEST_DATA[i][0][0]));
+			
+			cell = row.createCell(1);
+			cell.setCellValue(deNormaliseData(result[i+1]));
+		}
+		
+		File currDir = new File(".");
+		String path = currDir.getAbsolutePath();
+		String fileLocation = path.substring(0, path.length() - 1) + "test.xlsx";
+
+		try {
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeValidation(double[] result) {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("validation");
+		sheet.setColumnWidth(0, 8560);
+		sheet.setColumnWidth(1, 8560);
+		
+		Row header = sheet.createRow(0);
+		
+		// create table worksheet headers
+		Cell headerCell = header.createCell(0);
+		headerCell.setCellValue("Date");	
+		headerCell = header.createCell(1);
+		headerCell.setCellValue("Skelton");
+		
+		// fill rows
+		for(int i=0; i<result.length-1; i++) {
+			Row row = sheet.createRow(i+1);
+			Cell cell = row.createCell(0);
+			cell.setCellValue(deNormaliseKey(data_sets.VALIDATION_DATA[i][0][0]));
+			
+			cell = row.createCell(1);
+			cell.setCellValue(deNormaliseData(result[i+1]));
+		}
+		
+		File currDir = new File(".");
+		String path = currDir.getAbsolutePath();
+		String fileLocation = path.substring(0, path.length() - 1) + "validation.xlsx";
+
+		try {
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeResults(double[] result) {
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheet = workbook.createSheet("results");
 		sheet.setColumnWidth(0, 8560);
@@ -112,7 +186,7 @@ public class excel_handler {
 		headerCell.setCellValue("Skelton");
 		
 		// fill rows
-		for(int i=0; i<setLength-1; i++) {
+		for(int i=0; i<result.length-1; i++) {
 			Row row = sheet.createRow(i+1);
 			Cell cell = row.createCell(0);
 			cell.setCellValue(deNormaliseKey(data_sets.TRAINING_DATA[i][0][0]));
@@ -124,6 +198,7 @@ public class excel_handler {
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
 		String fileLocation = path.substring(0, path.length() - 1) + "results.xlsx";
+
 		try {
 			FileOutputStream outputStream = new FileOutputStream(fileLocation);
 			workbook.write(outputStream);
